@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const router = require('./router/router');
 const sequelize = require("./config/config");
@@ -27,7 +28,7 @@ sequelize
   await sequelize.sync();
 })
 .then(() => {
-  app.listen(8080, () => {
+  app.listen(process.env.PORT == null ? 8080 : process.env.PORT, () => {
     console.log("Servdor Online na porta 8080");
   });
 })
