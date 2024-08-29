@@ -5,9 +5,14 @@ const { validateAmbientId, validateUser } = require("../middlewares/ValidateUser
 const { validadeProduct, validateProductId } = require("../middlewares/ValidadeProduct");
 const { validadeManager, validateManagerId } = require("../middlewares/ValidadeManager");
 const ManagerController = require("../controller/ManagerController");
+const authenticateToken = require("../middlewares/authenticateToken");
 
 const router = Router();
 
+
+router.post('/login',(req, res) =>{
+  UserController.login(req,res)
+})
 // User Routes
 
 router.post("/user",validateUser, (req, res) => {

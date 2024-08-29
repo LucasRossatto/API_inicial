@@ -1,7 +1,40 @@
 const User = require("../models/User");
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcryptjs");
+const jwt = require('jsonwebtoken');
 
 const UserController = {
+  login: async (req, res) => {
+    try {
+      const { email, senha } = req.body;
+      const user = await User.findOne({ where: { email } });
+      if (!user) {
+        return res.status(400).json({
+          msg: "Email ou senga incorretos",
+        });
+      }
+
+      const isValida = await bcrypt.compare(senha, user.senha);
+      if (!isValida) {
+        return res.status(400).json({
+          msg: "Email ou senha incorretos",
+        });
+      }
+
+      const token = jwt.sign({
+        email: user.email,
+        nome: user.nome
+      }, process.env.SECRET, { expiresIn: '1h'});
+
+      return res.status(200).json({
+        msg:'Login realizado com sucesso',
+        token
+      })
+    } catch (error) {
+      console.error(error);
+      return res.status(500), json({ msg: "Acione o Suporte" });
+    }
+  },
+
   create: async (req, res) => {
     try {
       const { nome, senha, email } = req.body;
