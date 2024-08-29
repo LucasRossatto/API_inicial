@@ -4,7 +4,7 @@ const UserController = {
   create: async (req, res) => {
     try {
       const { nome, senha, email } = req.body;
-      const userCriado  = await User.create({ nome, email, senha});
+      const userCriado = await User.create({ nome, email, senha });
 
       return res.status(200).json({
         msg: "Usuário criado com sucesso!",
@@ -18,6 +18,26 @@ const UserController = {
 
   update: async (req, res) => {
     try {
+      const { id } = req.params;
+      const { nome, senha, email } = req.body;
+      const userUpdate = await User.findByPk(id);
+      if (userUpdate == null) {
+        return res.status(404).json({
+          msg: "Usuário não encontrado",
+        });
+      }
+
+      if (updated) {
+        return res.status(200).json({
+          msg: "Usuário atualizado com sucesso!",
+        });
+      }
+
+      const updated = userUpdate.update({
+        nome,
+        senha,
+        email,
+      });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ msg: "Acione o Suporte" });
@@ -26,11 +46,11 @@ const UserController = {
 
   getAll: async (req, res) => {
     try {
-      const usersListados  = await User.findAll();
-        return res.status(200).json({
-            msg:'Usuarios encontrados',
-            user: usersListados
-        });
+      const usersListados = await User.findAll();
+      return res.status(200).json({
+        msg: "Usuarios encontrados",
+        user: usersListados,
+      });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ msg: "Acione o Suporte" });
@@ -40,18 +60,17 @@ const UserController = {
   getOne: async (req, res) => {
     try {
       const id = req.params;
-      const userEncontrado = await User.findByPk(id);        
-        if(userEncontrado == null){
-          return res.status(404).json({
-            msg: ' Usuario nao encontrado'
-          })
-        };
-
-        return res.status(200).json({
-          msg: 'Usuario encontrado com sucesso!',
-          user: userEncontrado
+      const userEncontrado = await User.findByPk(id);
+      if (userEncontrado == null) {
+        return res.status(404).json({
+          msg: " Usuario nao encontrado",
         });
+      }
 
+      return res.status(200).json({
+        msg: "Usuario encontrado com sucesso!",
+        user: userEncontrado,
+      });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ msg: "Acione o Suporte" });
@@ -60,6 +79,16 @@ const UserController = {
 
   delete: async (req, res) => {
     try {
+      const { id } = req.params;
+      const userEncontrado = await User.findByPk(id);
+      if (userEncontrado == null) {
+        return res.status(404).json({
+          msg: "Usuário nãó emcontrado",
+        });
+      }
+      // Destroy = deletar
+      // As same it deleted
+      await userEncontrado.destroy();
       return res.status(200).json({
         msg: "Usuário deletado com sucesso",
       });

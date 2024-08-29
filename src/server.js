@@ -2,11 +2,12 @@ const express = require("express");
 const router = require('./router/router');
 const sequelize = require("./config/config");
 const User = require("./models/User");
+const Product = require("./models/Product");
 const app = express();
 
 //Modelo de AOI JSON
 app.use(express.json());
-app.use('/api/user', router);
+app.use('/api', router);
 // REQ -> reqisição
 // RES -> respnse
 app.get("/healthcheck", (req, res) => {
@@ -19,8 +20,6 @@ app.get("/healthcheck", (req, res) => {
 
 // Listen -> ouvir (porta)
 
-
-
 sequelize
 .authenticate()
 .then(async () =>{
@@ -29,7 +28,7 @@ sequelize
 })
 .then(() => {
   app.listen(8080, () => {
-    console.log("Servdor Online")
+    console.log("Servdor Online na porta 8080");
   });
 })
 .catch((error) => {
