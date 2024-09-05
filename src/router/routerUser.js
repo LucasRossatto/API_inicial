@@ -1,5 +1,7 @@
 const { Router } =  require("express");
 const userRoutes = require("./routerUser");
+const { validateUser, validateAmbientId } = require("../middlewares/ValidateUser");
+const { validadeProduct } = require("../middlewares/ValidadeProduct");
 
 const router = Router();
 
